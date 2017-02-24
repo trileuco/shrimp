@@ -84,7 +84,7 @@ Shrimp.configure do |config|
 end
 ```
 
-## Logging
+### Logging
 
 Shrimp support basic logging to STDOUT. If you want Shrimp to log to a file, in Rails do:
 
