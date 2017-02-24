@@ -8,6 +8,7 @@ module Shrimp
       @options[:polling_offset]   ||= 1
       @options[:cache_ttl]        ||= 1
       @options[:request_timeout]  ||= @options[:polling_interval] * 10
+      @options[:error_callback]   ||= lambda { |exception, env| raise exception }
     end
 
     def call(env)
@@ -54,7 +55,13 @@ module Shrimp
 
     # Private: start phantom rendering in a separate process
     def fire_phantom
-      Process::detach fork { Phantom.new(@request.url.sub(%r{\.pdf$}, ''), @options, @request.cookies).to_pdf(render_to) }
+      Process::detach fork {
+        begin
+          Phantom.new(@request.url.sub(%r{\.pdf$}, ''), @options, @request.cookies).to_pdf!(render_to)
+        rescue => e
+          @options[:error_callback].call(e, @request.env)
+        end
+      }
     end
 
     def render_to

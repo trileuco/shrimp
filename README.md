@@ -126,7 +126,9 @@ Shrimp comes with a middleware that allows users to get a PDF view of any page o
 **With Shrimp options**
 
     # options will be passed to Shrimp::Phantom.new
-    config.middleware.use Shrimp::Middleware, :margin => '0.5cm', :format => 'Letter'
+    config.middleware.use Shrimp::Middleware, :margin => '0.5cm', :format => 'Letter', :error_callback => Proc.new { |exception, env|
+      ExceptionNotifier.notify_exception(exception, :env => env)
+    }
 
 **With conditions to limit routes that can be generated in pdf**
 
