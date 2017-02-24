@@ -34,6 +34,7 @@ Shrimp::Phantom.new(url, options).to_pdf("~/output.pdf")
 ## Configuration
 
 ```
+# config/initializers/shrimp.rb
 Shrimp.configure do |config|
 
   # The path to the phantomjs executable
@@ -78,6 +79,15 @@ Shrimp.configure do |config|
   # the path to a json configuration file for command-line options
   # config.command_config_file = "#{Rails.root.join('config', 'shrimp', 'config.json')}"
 end
+```
+
+## Logging
+
+Shrimp support basic logging to STDOUT. If you want Shrimp to log to a file, in Rails do:
+
+```
+# config/initializers/shrimp.rb
+Shrimp.logger = Logger.new(Rails.root.join('log', "shrimp.log"))
 ```
 
 ### Command Configuration

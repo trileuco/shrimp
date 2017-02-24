@@ -1,6 +1,7 @@
 require 'uri'
 require 'json'
 require 'shellwords'
+require 'open3'
 
 module Shrimp
   class NoExecutableError < StandardError
@@ -33,20 +34,27 @@ module Shrimp
     # Returns the stdout output of phantomjs
     def run
       @error  = nil
-      @result = `#{cmd}`
-      unless $?.exitstatus == 0
-        @error  = @result
-        @result = nil
+      result = ''
+      Open3.popen2e(cmd) do |i, oe, wt|
+        oe.each do |l|
+          Shrimp.logger.info l.chomp
+          result += l
+        end
+
+        exit_status = wt.value
+        Shrimp.logger.info "Exit value #{exit_status}"
+        @result = result
+        unless exit_status.success?
+          @error  = @result
+          @result = nil
+        end
       end
       @result
     end
 
     def run!
-      @error  = nil
-      @result = `#{cmd}`
-      unless $?.exitstatus == 0
-        @error  = @result
-        @result = nil
+      run
+      if @error
         raise RenderingError.new(@error)
       end
       @result
