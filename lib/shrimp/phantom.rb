@@ -64,6 +64,7 @@ module Shrimp
     def cmd
       cookie_file                       = dump_cookies
       format, zoom, margin, orientation = options[:format], options[:zoom], options[:margin], options[:orientation]
+      resources_timeout                 = options[:resources_timeout]
       rendering_time, timeout           = options[:rendering_time], options[:rendering_timeout]
       viewport_width, viewport_height   = options[:viewport_width], options[:viewport_height]
       max_redirect_count                = options[:max_redirect_count]
@@ -80,6 +81,7 @@ module Shrimp
         margin,
         orientation,
         cookie_file,
+        resources_timeout,
         rendering_time,
         timeout,
         viewport_width,

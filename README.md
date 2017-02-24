@@ -57,6 +57,9 @@ Shrimp.configure do |config|
   # a temporary dir used to store tempfiles
   # config.tmpdir           = Dir.tmpdir
 
+  # the timeout for phantomjs waiting to load resources of the page
+  # config.resources_timeout = 5000
+
   # the default rendering time in ms
   # increase if you need to render very complex pages
   # config.rendering_time   = 1000
