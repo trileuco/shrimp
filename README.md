@@ -146,6 +146,16 @@ Shrimp comes with a middleware that allows users to get a PDF view of any page o
     # conditions can be strings (either one or an array)
     config.middleware.use Shrimp::Middleware, {}, :except => ['/secret']
 
+**With condition to let applications check the user's authorization to do the action
+
+This is a simple example. The application could add its own logic. If the authorization_app returns 200 as status code
+the action is allowed and the Shrimp middleware will continue with the exportation action.
+
+    config.middleware.use Shrimp::Middleware, {}, {
+        :authorization_app => Proc.new { |env|
+          [401, {}, ['']]
+        }
+      }
 
 ### Polling
 

@@ -40,6 +40,13 @@ module Shrimp
               reload_response(@options[:polling_interval])
             end
           else
+            if @conditions[:authorization_app]
+              status, headers, response = @conditions[:authorization_app].call(env)
+              if status != 200
+                return [status, headers, response]
+              end
+            end
+
             File.delete(render_to) if already_rendered?
             set_rendering_flag
             fire_phantom
